@@ -2,8 +2,9 @@ window.addEventListener('DOMContentLoaded', function(){
     'use strict';
     let tab=document.querySelectorAll('.info-header-tab'),
         info = document.querySelector('.info-header'),
-        tabContent = document.querySelectorAll('.info-tabcontent');
-
+        tabContent = document.querySelectorAll('.info-tabcontent'),
+        tabBtns = document.querySelectorAll('.description-btn');
+    
     function hideTabContent(a){
         for (let i = a; i<tabContent.length; i++){
             tabContent[i].classList.remove('show');
@@ -18,6 +19,8 @@ window.addEventListener('DOMContentLoaded', function(){
             tabContent[b].classList.add('show');
         }
     }
+
+
 
     info.addEventListener('click', function(event){
         let targ = event.target;
@@ -58,27 +61,18 @@ window.addEventListener('DOMContentLoaded', function(){
 
         function updateClock(){
             let t = getTimeRemaining(endtime);
-            
+
+            function addZero(n){
+                if (n>=10) {
+                    return n;
+                } else {
+                    return '0' + n;
+                }
+            }            
             if (t.total>0) {
-                if (Number(t.hour)>=10) { 
-                    mhours.textContent = t.hour;
-                } else {
-                    mhours.textContent = '0' +  t.hour;
-                }
-                if (Number(t.min)>=10) {             
-                    mminutes.textContent = t.min;
-                } else {
-                    mminutes.textContent = '0' +  t.min;
-                }
-                // mseconds.textContent = t.sec;
-                if (Number(t.sec)>=10) {
-                    mseconds.textContent = t.sec;
-                } else {
-                    mseconds.textContent ='0' + t.sec;
-                }
-                // if (t.total<=0) {
-                //     clearInterval(timeInterval);
-                // }
+                mhours.textContent = addZero(t.hour);
+                mseconds.textContent = addZero(t.min);
+                mseconds.textContent = addZero(t.sec);
             } else {
                 clearInterval(timeInterval);
                 mhours.textContent = '00';
@@ -90,4 +84,42 @@ window.addEventListener('DOMContentLoaded', function(){
 
     setClock('timer', deadLine);
 
+    //modal
+    let mmore = document.querySelector('.more'),
+        moverlay = document.querySelector('.overlay'),
+        mclose = document.querySelector('.popup-close');
+
+    function moreInfo(){
+        moverlay.style.display = 'block';
+        mmore.classList.add('more-splash');
+        document.body.style.overflow = 'hidden'; 
+    }
+    mmore.addEventListener('click', function(){
+        // moverlay.style.display = 'block';
+        // this.classList.add('more-splash');
+        // document.body.style.overflow = 'hidden';
+        moreInfo();
+    });
+
+    mclose.addEventListener('click', function(){
+        moverlay.style.display = 'none';
+        mmore.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    });
+
+    let parentInfo = document.querySelector('.info');        
+    
+    parentInfo.addEventListener('click',function(event){
+        let targ = event.target;
+        if (targ && targ.classList.contains('description-btn')){
+            // moverlay.style.display = 'block';
+            // mmore.classList.add('more-splash');
+            // document.body.style.overflow = 'hidden'; 
+            moreInfo();
+        }
+    });
+
+  
 });
+
+// git push -u origin master
